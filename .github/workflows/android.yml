@@ -18,6 +18,11 @@ jobs:
           unzip -q android-ndk-r26d-linux.zip
           echo "ANDROID_NDK_HOME=$PWD/android-ndk-r26d" >> $GITHUB_ENV
 
+      - name: Patch Makefile to use magic.cpp instead of bmi2.cpp
+        run: |
+          sed -i 's/src\/magic.cpp src\/datagen.cpp/src\/bmi2.cpp src\/datagen.cpp/' Makefile
+          grep -n "BASE_SRCS +=" Makefile
+
       - name: Build
         run: |
           make CXX=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++ \
